@@ -28,7 +28,7 @@ public class FetchInputRunnable implements Runnable {
 
     @Override
     public void run() {
-        Log.d(TAG, "GetCommandRunnable run...");
+        Log.d(TAG, "FetchInputRunnable run...");
 
         try {
         	String endpoint = "http://play.bnotions.com:9090";
@@ -38,7 +38,8 @@ public class FetchInputRunnable implements Runnable {
     	        public void success(String str, Response ignored) {
     	            // Prints the correct String representation of body.
     	            System.out.println(str);
-    	            parseResponse(str);
+    	            ArrayList<ConferenceTalk> talks = parseResponse(str);
+    	            Solver.getOptimalSchedule(talks);
     	        }
 
     	        @Override

@@ -15,6 +15,9 @@ public class ConferenceTalk {
 	@SerializedName("name")
 	private final String name;
 	
+	private int startTime;
+	private int endTime;
+
 	public ConferenceTalk(int votes, int minutes, String name) {
 		this.votes = votes;
 		this.minutes = minutes;
@@ -31,6 +34,22 @@ public class ConferenceTalk {
 
 	public String getName() {
 		return name;
+	}
+
+	public int getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+
+	public int getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(int endTime) {
+		this.endTime = endTime;
 	}
 	
 	
