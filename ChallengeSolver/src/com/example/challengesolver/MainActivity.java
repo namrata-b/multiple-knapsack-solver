@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
 
 import android.support.v7.app.ActionBarActivity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,8 +35,10 @@ public class MainActivity extends ActionBarActivity {
 	private Button computeSolutionBtn;
 	private TextView inputTv;
 	private TextView solutionTv;
+	private ProgressDialog mProgressDialog;
 	private Handler mHandler1;
 	private Handler mHandler2;
+	private ArrayList<ConferenceTalk> talks;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +48,14 @@ public class MainActivity extends ActionBarActivity {
         inputTv = (TextView) findViewById(R.id.inputTv);
         solutionTv = (TextView) findViewById(R.id.solutionTv);
         
+        mProgressDialog = new ProgressDialog(this);
+        
         mHandler1 = new Handler() { 
         	@Override public void handleMessage(Message msg) { 
         		String input =(String) msg.obj;
         		inputTv.setText("Input = "+ input);
-        		Solver.setAllTalks(parseResponse(input));
+        		talks = parseResponse(input);
+        		mProgressDialog.dismiss();
         	}
         };
         
@@ -57,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
         	@Override public void handleMessage(Message msg) { 
         		String solution =(String) msg.obj;
         		solutionTv.setText(solution);
+        		mProgressDialog.dismiss();
         	}
         };
         
@@ -84,18 +91,23 @@ public class MainActivity extends ActionBarActivity {
     
     public void onFetchInputClicked(View v) {
     	// get input from api endpoint
+    	mProgressDialog.setTitle(R.string.input_dialog_title);
+    	mProgressDialog.show();
         ExecutorService executor = Executors.newSingleThreadExecutor(); 
         executor.submit(new FetchInputRunnable());
         computeSolutionBtn.setVisibility(View.VISIBLE);
     }
     
     public void onComputeSolutionClicked(View v) {
-    	if(Solver.getAllTalks().size() > 0) {
+    	mProgressDialog.setTitle(R.string.solution_dialog_title);
+    	mProgressDialog.show();
+    	
+    	if(talks.size() > 0) {
     		// run in background
     		AsyncTask<Void, Void, String> asyncTask = new AsyncTask<Void, Void, String>() {
 				@Override
 				protected String doInBackground(Void... params) {
-					String res = Solver.getOptimalSchedule();
+					String res = Solver.getOptimalSchedule(talks);
 					return res;
 				}
 				

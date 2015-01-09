@@ -10,32 +10,18 @@ public class Solver {
 	private static final int INTERVAL_B_CAPACITY = 480;
 	private static final int NUM_MINUTES_IN_HOUR = 60;
 	
-	private static ArrayList<ConferenceTalk> allTalks = new ArrayList<ConferenceTalk>();
-	private static String formattedSolution = ""; 
-	
-	public static ArrayList<ConferenceTalk> getAllTalks() {
-		return allTalks;
-	}
-
-	public static void setAllTalks(ArrayList<ConferenceTalk> allTalks) {
-		Solver.allTalks = allTalks;
-	}
-
-	public static String getFormattedSolution() {
-		return formattedSolution;
-	}
-
-	public static String getOptimalSchedule() {
+	public static String getOptimalSchedule(ArrayList<ConferenceTalk> allTalks) {
 		// Solution 1
 		Solution s1 = getSubproblemSolution(allTalks, INTERVAL_A_CAPACITY, INTERVAL_B_CAPACITY);
 		// Solution 2
 		Solution s2 = getSubproblemSolution(allTalks, INTERVAL_B_CAPACITY, INTERVAL_A_CAPACITY);
 		
 		// Determine optimal
+		String formattedSolution = "";
 		if(s1.getTotalVotes() >= s2.getTotalVotes()) {
-			s1.print();
+			formattedSolution = s1.print();
 		} else {
-			s2.print();
+			formattedSolution = s2.print();
 		}
 		
 		return formattedSolution;
@@ -142,7 +128,9 @@ public class Solver {
 			return totalVotes;
 		}
 		
-		public void print() {
+		public String print() {
+			String formattedSolution = "";
+			
 			int startTime1 = 9*NUM_MINUTES_IN_HOUR;
 //			int endTime1 = 12*NUM_MINUTES_IN_HOUR;
 			int startTime2 = 13*NUM_MINUTES_IN_HOUR;
@@ -152,19 +140,22 @@ public class Solver {
 			Log.d(TAG, "Solution is : ");
 			// compute and print start and end times for each talk
 			if(capacity1 == INTERVAL_A_CAPACITY) {
-				computeStartAndEndTimes(solutionForKnapSack1, startTime1);
-				computeStartAndEndTimes(solutionForKnapSack2, startTime2);
+				formattedSolution += computeStartAndEndTimes(solutionForKnapSack1, startTime1);
+				formattedSolution += computeStartAndEndTimes(solutionForKnapSack2, startTime2);
 			} else if(capacity2 == INTERVAL_A_CAPACITY) {
-				computeStartAndEndTimes(solutionForKnapSack2, startTime1);
-				computeStartAndEndTimes(solutionForKnapSack1, startTime2);
+				formattedSolution += computeStartAndEndTimes(solutionForKnapSack2, startTime1);
+				formattedSolution += computeStartAndEndTimes(solutionForKnapSack1, startTime2);
 			}
 			
 			formattedSolution += "Total votes = " + totalVotes + "\n";
 			
 			Log.d(TAG, "Total votes = " + totalVotes);
+			
+			return formattedSolution;
 		}
 		
-		private static void computeStartAndEndTimes(ArrayList<ConferenceTalk> solutionSet, int startTime) {
+		private static String computeStartAndEndTimes(ArrayList<ConferenceTalk> solutionSet, int startTime) {
+			String solution = "";
 			for(int i = 0; i<solutionSet.size(); i++) {
 				ConferenceTalk talk = solutionSet.get(i);
 				int start, end;
@@ -178,10 +169,11 @@ public class Solver {
 				end = talk.getStartTime()+talk.getMinutes();
 				talk.setEndTime(end);
 				
-				formattedSolution += getFormattedTime(start) + " - " + getFormattedTime(end) +" : "+talk.getName() + "\n";
+				solution += getFormattedTime(start) + " - " + getFormattedTime(end) +" : "+talk.getName() + "\n";
 				
 				Log.d(TAG, getFormattedTime(start) + " - " + getFormattedTime(end) +" : "+talk.getName());
 			}
+			return solution;
 		}
 		
 		private static String getFormattedTime(int time) {

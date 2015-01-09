@@ -4,5 +4,7 @@
     <string name="app_name">ChallengeSolver</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="input_dialog_title">Fetching Input from Endpoint</string>
+    <string name="solution_dialog_title">Computing Solution</string>
 
 </resources>
