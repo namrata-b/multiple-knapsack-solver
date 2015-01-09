@@ -64,13 +64,12 @@ public class Solver {
 	
 	private static boolean[] getSolutionForIndividualKnapsack(ArrayList<ConferenceTalk>talks, int capacity) {
 		final int INPUT_SIZE = talks.size();
+		
+		// All elements are false by default
 		boolean[] includedTalks = new boolean[INPUT_SIZE];
 		
+		// All elements are 0 by default
 		int[][] maxVotes = new int[INPUT_SIZE+1][capacity+1];
-//		for(int j = 0; j <= capacity; j++) {
-//			maxVotes[0][j] = 0;
-//			includedTalks[j] = false;
-//		}
 		
 		for(int i = 1; i <= INPUT_SIZE; i++){
 			for(int j = 0; j <= capacity; j++) {
@@ -132,9 +131,7 @@ public class Solver {
 			String formattedSolution = "";
 			
 			int startTime1 = 9*NUM_MINUTES_IN_HOUR;
-//			int endTime1 = 12*NUM_MINUTES_IN_HOUR;
 			int startTime2 = 13*NUM_MINUTES_IN_HOUR;
-//			int endTime2 = 21*NUM_MINUTES_IN_HOUR;
 			
 			formattedSolution += "Solution is : \n";
 			Log.d(TAG, "Solution is : ");
