@@ -9,8 +9,45 @@
     tools:context="com.example.challengesolver.MainActivity" >
 
     <TextView
+        android:id="@+id/helloTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="@string/hello_world" />
+    
+    <Button
+        android:id="@+id/fetchInputBtn"
+        android:layout_below="@id/helloTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:onClick="onFetchInputClicked"
+        android:text="Fetch Input" />
+    
+    <Button
+        android:id="@+id/computeSolnBtn"
+        android:layout_below="@id/fetchInputBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:onClick="onComputeSolutionClicked"
+        android:text="Compute Solution"
+        android:visibility="gone" />
+    
+    <TextView
+        android:id="@+id/inputTv"
+        android:layout_below="@id/computeSolnBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="" />
+    
+     <TextView
+        android:id="@+id/solutionTv"
+        android:layout_below="@id/inputTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="" />
 
 </RelativeLayout>

@@ -10,11 +10,26 @@ public class Solver {
 	private static final int INTERVAL_B_CAPACITY = 480;
 	private static final int NUM_MINUTES_IN_HOUR = 60;
 	
-	public static void getOptimalSchedule(ArrayList<ConferenceTalk>talks) {
+	private static ArrayList<ConferenceTalk> allTalks = new ArrayList<ConferenceTalk>();
+	private static String formattedSolution = ""; 
+	
+	public static ArrayList<ConferenceTalk> getAllTalks() {
+		return allTalks;
+	}
+
+	public static void setAllTalks(ArrayList<ConferenceTalk> allTalks) {
+		Solver.allTalks = allTalks;
+	}
+
+	public static String getFormattedSolution() {
+		return formattedSolution;
+	}
+
+	public static String getOptimalSchedule() {
 		// Solution 1
-		Solution s1 = getSubproblemSolution(talks, INTERVAL_A_CAPACITY, INTERVAL_B_CAPACITY);
+		Solution s1 = getSubproblemSolution(allTalks, INTERVAL_A_CAPACITY, INTERVAL_B_CAPACITY);
 		// Solution 2
-		Solution s2 = getSubproblemSolution(talks, INTERVAL_B_CAPACITY, INTERVAL_A_CAPACITY);
+		Solution s2 = getSubproblemSolution(allTalks, INTERVAL_B_CAPACITY, INTERVAL_A_CAPACITY);
 		
 		// Determine optimal
 		if(s1.getTotalVotes() >= s2.getTotalVotes()) {
@@ -22,6 +37,8 @@ public class Solver {
 		} else {
 			s2.print();
 		}
+		
+		return formattedSolution;
 	}
 	
 	private static Solution getSubproblemSolution(ArrayList<ConferenceTalk>talks, int capacity1, int capacity2) {
@@ -131,15 +148,18 @@ public class Solver {
 			int startTime2 = 13*NUM_MINUTES_IN_HOUR;
 //			int endTime2 = 21*NUM_MINUTES_IN_HOUR;
 			
+			formattedSolution += "Solution is : \n";
 			Log.d(TAG, "Solution is : ");
 			// compute and print start and end times for each talk
 			if(capacity1 == INTERVAL_A_CAPACITY) {
 				computeStartAndEndTimes(solutionForKnapSack1, startTime1);
 				computeStartAndEndTimes(solutionForKnapSack2, startTime2);
-			} else {
+			} else if(capacity2 == INTERVAL_A_CAPACITY) {
 				computeStartAndEndTimes(solutionForKnapSack2, startTime1);
 				computeStartAndEndTimes(solutionForKnapSack1, startTime2);
 			}
+			
+			formattedSolution += "Total votes = " + totalVotes + "\n";
 			
 			Log.d(TAG, "Total votes = " + totalVotes);
 		}
@@ -157,6 +177,8 @@ public class Solver {
 				
 				end = talk.getStartTime()+talk.getMinutes();
 				talk.setEndTime(end);
+				
+				formattedSolution += getFormattedTime(start) + " - " + getFormattedTime(end) +" : "+talk.getName() + "\n";
 				
 				Log.d(TAG, getFormattedTime(start) + " - " + getFormattedTime(end) +" : "+talk.getName());
 			}
